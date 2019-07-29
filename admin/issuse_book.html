@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" type="image/png" href="assets/img/favicon.ico">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+	<title>Library Management</title>
+
+	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+	<meta name="viewport" content="width=device-width" />
+
+
+	<!-- Bootstrap core CSS     -->
+	<link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+
+	<!-- Animation library for notifications   -->
+	<link href="assets/css/animate.min.css" rel="stylesheet"/>
+
+	<!--  Light Bootstrap Table core CSS    -->
+	<link href="assets/css/light-bootstrap-dashboard.css?v=1.4.0" rel="stylesheet"/>
+
+
+	<!--  CSS for Demo Purpose, don't include it in your project     -->
+	<link href="assets/css/demo.css" rel="stylesheet" />
+	<script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-database.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-functions.js"></script>
+	
+
+
+	<!--     Fonts and icons     -->
+	<link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+	<link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<style>
+	.form-group.required .control-label:after {
+		content:"*";
+		color: red;
+	}
+	.btn-add{
+		background-color:rgb(151,114,217);
+		color: white;
+		font-weight: 600;
+		letter-spacing: 1.5px;
+		margin-right: 15px;
+		border-color: purple;
+	}
+	.btn-add :hover{
+		color: gray;
+	}
+	.delete-btn{
+		background-color:rgb(132, 221, 58);
+		border-color: green;
+		color: white;
+		letter-spacing: 1.5px;
+		font-weight: 700;
+		margin-right: 15px;
+	}
+	.delete-btn :hover{
+		color: gray;
+	}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+
+		<div class="sidebar" data-color="purple" data-image="./assets/img/sidebar-5.jpg">
+			<div class="sidebar-wrapper">
+				<div class="logo">
+					<a href="#" class="simple-text">
+						Library Management
+					</a>
+				</div>
+
+				<ul class="nav">
+					<li>
+						<a href="#">
+							<i class="pe-7s-graph"></i>
+							<p>Dashboard</p>
+						</a>
+					</li>
+					<li>
+						<a href="user.html">
+							<i class="pe-7s-news-paper"></i>
+							<p>Add New Books</p>
+						</a>
+					</li>
+					<li>
+						<a href="book_list.html">
+							<i class="pe-7s-notebook"></i>
+							<p>Books List</p>
+						</a>
+					</li>
+					<li class="active">
+						<a href="issuse_book.html">
+							<i class="pe-7s-note2"></i>
+							<p>Issuse Book List</p>
+						</a>
+					</li>
+					<li>
+						<a href="return_book.html">
+							<i class="pe-7s-notebook"></i>
+							<p>Return Books</p>
+						</a>
+					</li>
+					<li class="active-pro">
+						<a href="#">
+							<i class="pe-7s-rocket"></i>
+							<p>ROY@L D&#8377;eams</p>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+
+		<div class="main-panel">
+			<nav class="navbar navbar-default navbar-fixed">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#">Issuse Book</a>
+					</div>
+					<div class="collapse navbar-collapse">
+						<ul class="nav navbar-nav navbar-left">
+							<li>
+								<a>
+									<p class="hidden-lg hidden-md">Search</p>
+									<input style="width:250px;" type="search" class="form-control issue-book-search" id="book-issue-search" placeholder="Search">
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+
+			<div class="content" style="overflow-y: auto;">
+				<div class="container-fluid">
+					<div class="card">
+						<table class="table table-hover table-striped " id="table-int"><thead><tr><td>Date</td><td>Id</td><td>Book Name</td><td>Book Id</td><td>Confirm</td></tr></thead><tbody id="int-tbody"></tbody></table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<script>
+
+	var database;
+	var users;
+
+
+	function configure() {
+		var config = {
+			apiKey: "AIzaSyD5TkoPbfWFuE-9tcCacfH-ziKYXQ_7eN0",
+			authDomain: "librarymanagment-59aaf.firebaseapp.com",
+			databaseURL: "https://librarymanagment-59aaf.firebaseio.com",
+			projectId: "librarymanagment-59aaf",
+			storageBucket: "librarymanagment-59aaf.appspot.com",
+			messagingSenderId: "1079584735039"
+		};
+		firebase.initializeApp(config);
+	}
+	function init(){
+		configure();
+		database = firebase.database();
+		//console.log(database);
+		users = database.ref('Student');
+		//console.log(users);
+		// console.log(firebase.app().name);
+	}
+	function furtereq() {
+		var rowdata,tstatus,tfarmer;
+		// data=users.val();
+		// console.log(users.val());
+
+		users.on('value',function(data){
+			$('#int-tbody').empty();
+			rowdata = data.val();
+			if(rowdata != null){
+				//console.log(rowdata);
+				
+				var keys = Object.keys(rowdata);
+				//console.log(keys);
+				
+				for(var i=keys.length-1; i >=0 ; i--){
+					tstatus = rowdata[keys[i]]['Book_issue'];
+					// console.log(rowdata[keys[0]]);
+					if(tstatus==null)
+						continue;
+					req = Object.keys(tstatus);
+					if(req.length>0){
+						for(var j=req.length-1; j >=0 ; j--){
+							st = tstatus[req[j]]['status'];
+							if(st == "false" || st == false){
+
+								// var date_str=dateconveter(req[j]/1000);
+								var date_str=dateconveter(parseInt(req[j]/1000));
+								// console.log(dateconveter(date));
+//console.log(req[j]);
+
+								var btn_create="<button class=\"btn sub-btn btn-add\" id=\""+req[j]+"\">Add</button>";
+								btn_create=btn_create+"<button class=\"delete-btn btn sub-btn "+req[j]+"\">Delete</button>";
+
+								//Append Code
+								$('#table-int tbody').append("<tr><td>"+date_str+"</td><td>"+tstatus[req[j]]['issusedate']+"</td><td>"+tstatus[req[j]]['book_name']+"</td><td>"+tstatus[req[j]]['book_id']+"</td><td>"+btn_create+"</td></tr>");
+								var keyforclick=keys[i];
+								var id=req[j];
+								//make a key
+								// console.log(req[j]);
+								//Add Request
+								//var kk = '\'#'+req[j]+'\'';
+								var add_request = '#'+req[j];
+								//Add Request
+								$(add_request).on('click', function(){
+									var timestamp=(new Date().getTime());
+									var issuse_date=parseInt((timestamp/1000)+1296000).toString();
+									console.log(id+'\t'+'\t');
+									firebase.database().ref('Student/'+keyforclick+'/Book_issue/'+id).update({
+										'status':true,
+										'endtime':issuse_date
+									});
+									alert("Add Request successfull");
+									firebase.database().ref('Book_ISSSUE').update({
+										'id':id,
+										'status':true
+									});
+								});
+								var delete_id = '.'+req[j];
+								//Delete Request
+								$(delete_id).on('click', function(){
+									firebase.database().ref('Student/'+keyforclick+'/Book_issue/'+id).remove();
+									// console.log(this.id+'\t'+id);
+									alert("Delete Request successfull");
+								});
+							}
+						}
+					}
+
+				}
+			}else{
+				alert('No request for book issue');
+			}
+		},function(error){
+			alert(error);
+		});
+	}
+
+
+	function dateconveter(timestamp)
+	{
+		var months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+		var date=new Date(timestamp*1000);
+		// console.log(date);
+		var year = date.getFullYear();
+		var month = months_arr[date.getMonth()];
+		var day = date.getDate();
+		var hours = "0"+date.getHours();
+		var minutes = "0"+date.getMinutes();
+		// console.log(day+'/'+month+'/'+year);
+		return day+'/'+month+'/'+year+'\t\t\t'+hours.substr(-2)+':'+ minutes.substr(-2);
+	}
+	$(document).ready(function(){
+		init();
+		furtereq();
+		$('#book-issue-search').on("keyup",function(){
+			var value = $(this).val().toLowerCase();
+			$("#int-tbody tr").filter(function() {
+				$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+			});
+		});
+	});
+</script>
+</body>
+<script src="assets/js/jquery.3.2.1.min.js" type="text/javascript"></script>
+<script src="assets/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="assets/js/light-bootstrap-dashboard.js?v=1.4.0"></script>
+<script src="assets/js/demo.js"></script>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-functions.js"></script>
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+        <pre id="json"></pre>
+<script>
+        function configure() {
+            var config = {
+                apiKey: "AIzaSyD5TkoPbfWFuE-9tcCacfH-ziKYXQ_7eN0",
+                authDomain: "librarymanagment-59aaf.firebaseapp.com",
+                databaseURL: "https://librarymanagment-59aaf.firebaseio.com",
+                projectId: "librarymanagment-59aaf",
+                storageBucket: "librarymanagment-59aaf.appspot.com",
+                messagingSenderId: "1079584735039"
+            };
+            firebase.initializeApp(config);
+        }
+        function init() {
+            configure();
+            database = firebase.database();
+            //console.log(database);
+            users = database.ref('Book_ISSSUE');
+            users.on('value',function(data) {
+               var datas=data.val();
+               console.log(datas);
+               document.getElementById("json").innerHTML = JSON.stringify(datas, undefined, 2);    
+            });
+            //console.log(users);
+            // console.log(firebase.app().name);
+        } $(document).ready(function () {
+            init();
+            
+        });
+    </script>
+
+</body>
+
+</html>
